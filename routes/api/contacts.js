@@ -8,31 +8,21 @@ const {
   updateContact,
   updateFavorite,
 } = require('../../controllers/index');
+const validation = require('../../middlewares/validation');
+const authenticate = require('../../middlewares/authenticate');
 
-const { schemaContactJoi } = require('../../model/contact');
+const { contactJoi } = require('../../model/contact');
 
-const validation = (schema) => {
-  const contactValidation = (req, res, next) => {
-    const { error } = schema.validate(req.body);
+router.get('/', authenticate, getAllContacts);
 
-    if (error) {
-      return res.status(400).send({ message: 'missing required name field' });
-    }
-    next();
-  };
-  return contactValidation;
-};
+router.get('/:contactId', authenticate, getContactById);
 
-router.get('/', getAllContacts);
+router.post('/', authenticate, validation(contactJoi), addContact);
 
-router.get('/:contactId', getContactById);
+router.delete('/:contactId', authenticate, deleteContact);
 
-router.post('/', validation(schemaContactJoi), addContact);
+router.put('/:contactId', authenticate, validation(contactJoi), updateContact);
 
-router.delete('/:contactId', deleteContact);
-
-router.put('/:contactId', validation(schemaContactJoi), updateContact);
-
-router.patch('/:contactId/favorite', updateFavorite);
+router.patch('/:contactId/favorite', authenticate, updateFavorite);
 
 module.exports = router;

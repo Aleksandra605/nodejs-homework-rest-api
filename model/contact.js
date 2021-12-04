@@ -17,9 +17,13 @@ const contactSchema = Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user', //из какой коллекции брать
+  },
 });
 
-const schemaContactJoi = Joi.object({
+const contactJoi = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
@@ -27,4 +31,4 @@ const schemaContactJoi = Joi.object({
 
 const Contact = model('contact', contactSchema);
 
-module.exports = { Contact, schemaContactJoi };
+module.exports = { Contact, contactJoi };
