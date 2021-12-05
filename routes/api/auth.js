@@ -8,6 +8,8 @@ const authenticate = require('../../middlewares/authenticate');
 const currentUser = require('../../controllers/auth/currentUser');
 const upload = require('../../middlewares/upload');
 const updateAvatar = require('../../controllers/user/updateAvatar');
+const verify = require('../../controllers/auth/verify');
+const repeatVerification = require('../../controllers/auth/repeatVerification');
 
 const router = express.Router();
 
@@ -25,5 +27,9 @@ router.patch(
   upload.single('avatarURL'),
   updateAvatar
 );
+
+router.get('/verify/:verificationToken', verify);
+
+router.post('/verify', repeatVerification);
 
 module.exports = router;
